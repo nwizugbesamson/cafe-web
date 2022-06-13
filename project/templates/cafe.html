@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% import 'bootstrap/wtf.html' as wtf %}
+
+
+{% block content %}
+    <!-- Banner -->
+    <section id="banner">
+        <div class="content">
+            <header>
+                <h1>{{cafe.name}}
+                </h1>
+                <p><a href="{{cafe.map_url}}">{{cafe.location}}</a></p>
+                <p>Open Hours: {{cafe.open_hours}}</p>
+                <p>Coffee price: {{cafe.price}}</p>
+                <p>Seats available: {{cafe.seat}}</p>
+                <p>
+                <span><i class="fa-solid fa-star-half-stroke"></i>{{cafe.rating}}</span><br>
+					
+					{% if current_user.has_liked_post(cafe)  %}
+						<span><a href="{{url_for('main.like_page', cafe_id=cafe.id, action='unlike')}}"><i class="fa-solid fa-heart"></a></i>{{cafe.likes.count()}}</span>
+					{% else  %}
+						<span><a href="{{url_for('main.like_page', cafe_id=cafe.id, action='like')}}"><i class="fa-solid fa-heart"></a></i>{{cafe.likes.count()}}</span>
+					{% endif %}
+						
+					
+				</p>
+				
+				{% if current_user.id == 1 %}
+                <p>
+					<span>
+						<a class="button" href="{{url_for('main.delete_page', cafe_id=cafe.id)}}">DEL</a>
+					</span>  <span><a class="button" href="{{url_for('main.edit_page', _id=cafe.id)}}">EDIT</a></span></p>
+				{% endif %}
+            </header>
+           
+        </div>
+        <span class="image object">
+            <img src="{{cafe.img_url}}" alt="" />
+        </span>
+    </section>
+
+<!-- Section -->
+    <section>
+        <header class="major">
+            <h2>Productivity</h2>
+        </header>
+            
+            {% if cafe.wifi == 1 %}
+            <div class="features">
+                <article>
+                    <span class="icon solid fa-wifi"></span>
+                    <div class="content">
+                        <h3>Wifi Available</h3>
+                    </div>
+                </article>
+            </div>
+            {% endif %}
+            {% if cafe.phone == 1 %}
+            <div class="features">
+                <article>
+                    <span class="icon solid fa-phone"></span>
+                    <div class="content">
+                        <h3>Wifi Available</h3>
+                    </div>
+                </article>
+            </div>
+            {% endif %}
+            {% if cafe.plug == 1 %}
+            <div class="features">
+                <article>
+                    <span class="icon solid fa-plug"></span>
+                    <div class="content">
+                        <h3>Wifi Available</h3>
+                    </div>
+                </article>
+            </div>
+            {% endif %}
+            {% if cafe.toilet == 1 %}
+            <div class="features">
+                <article>
+                    <span class="icon solid fa-toilet"></span>
+                    <div class="content">
+                        <h3>Wifi Available</h3>
+                    </div>
+                </article>
+            </div>
+            {% endif %}
+       
+            
+        
+
+        
+    </section>
+
+    <section>
+        <div id="description">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for message in messages %}
+                        <li><p>{{ message }}</p></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+            {{ form.csrf_token }}
+            {{wtf.quick_form(form, novalidate=True)}}
+            <br>
+            <h2>Reviews</h2>
+            
+            {% for review  in cafe.reviews %}
+                
+            
+                
+            <div class="review row">
+            <small class="text-gray col-12">{{review.date}}</small>
+            <small class="text-gray col-12">{{review.review_author.username}}</small>
+            <p class="col-sm-10">{{review.review}}</p>
+            <div class="col-sm-2" style="text-align: right;">
+            <span data-content="Friendly Co-Worker" data-toggle="popover" title="" data-original-title="Amy H">
+            <img class="img-circle" src="{{review.review_author.email | gravatar}}">
+            </span>
+            </div>
+            </div>
+
+            {% endfor %}
+
+            
+            {% if not current_user.is_authenticated %}
+            <hr>
+            <div class="new_review_place">
+            <a class="btn btn-success leave_review" href="{{url_for('auth.login_page')}}">Join and leave a review!</a>
+            
+            </div>
+            {% endif %}
+                
+            
+
+            </div>
+           </div>
+    </section>
+{% endblock content %}
+    

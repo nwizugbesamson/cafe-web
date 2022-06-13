@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}			
+
+	<!-- Section -->
+	<section>
+		
+		<div class="posts">
+			
+			{% for cafe in  cafes.items %}
+				
+			<article class="itemArticle {{cafe.filter_class}}">
+				<a href="{{url_for('main.cafe_page', _id = cafe.id)}}" class="image"><img src="{{cafe.img_url}}" alt="" /></a>
+				<h3>{{cafe.name}}</h3>
+				
+				<p>
+					<span>{{cafe.open_hours}}</span><br>
+					<a href="{{cafe.map_url}}">{{cafe.location}}</a> <br>
+					<span><i class="fa-solid fa-star-half-stroke"></i>{{cafe.rating}}</span><br>
+					
+					{% if current_user.has_liked_post(cafe)  %}
+						<span><a href="{{url_for('main.like_page', cafe_id=cafe.id, action='unlike')}}"><i class="fa-solid fa-heart"></a></i>{{cafe.likes.count()}}</span>
+					{% else  %}
+						<span><a href="{{url_for('main.like_page', cafe_id=cafe.id, action='like')}}"><i class="fa-solid fa-heart"></a></i>{{cafe.likes.count()}}</span>
+					{% endif %}
+						
+					
+				</p>
+				
+				{% if current_user.id == 1 %}
+					<span>
+						<a class="button" href="{{url_for('main.delete_page', cafe_id=cafe.id)}}">DEL</a>
+					</span>  <span><a class="button" href="{{url_for('main.edit_page', _id=cafe.id)}}">EDIT</a></span>
+				{% endif %}
+					
+				
+				
+			</article>
+
+			{% endfor %}
+			
+			
+				
+		</div>
+	</section>
+	{% for page_num in cafes.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+	{% if page_num %}
+		
+		{% if cafes.page == page_num  %}
+			<a class="button" href="{{url_for('main.home_page', page=page_num)}}">{{page_num}}</a>
+		{% else %}
+			<a class="button" href="{{url_for('main.home_page', page=page_num)}}">{{page_num}}</a>
+		{% endif %}
+			
+	{% else %}
+		...
+	{% endif %}
+{% endfor %}
+	</div>
+	</div>
+			
+			
+				
+{% endblock content %}
+				
+{% block sidebar %}
+	<!-- Sidebar -->
+	<div id="sidebar">
+		<div class="inner">
+		
+			<!-- Menu -->
+				<nav id="menu">
+					<header class="major">
+						<h2>Filters</h2>
+					</header>
+					<ul>
+						<li>
+							<span class="opener">My Places</span>
+							<ul>
+								
+								<li  ><a href="{{url_for('main.my_post_page')}}">Liked_icons</a></li>
+							</ul>
+								
+							
+						</li>
+						
+						<li>
+							<span class="opener">Productivity</span>
+							<ul>
+								<li class="list active" data-filter="All"><a href="#">All</a></li>
+								<li	class="list" data-filter="plug"><a href="#">Plug</a></li>
+								<li	class="list" data-filter="wifi"><a href="#">Wifi</a></li>
+								<li	class="list" data-filter="phone"><a href="#">Phone</a></li>
+								<li	class="list" data-filter="toilet"><a href="#">Toilet</a></li>
+							</ul>
+						</li>
+						
+					</ul>
+				</nav>
+			
+			
+			<!-- Footer -->
+
+				<footer id="footer">
+					<ul class="icons">
+						<li><a href="{{url_for('main.add_page')}}" class="icon"><span>Suggest Place</span></a></li>
+					</ul>
+					<ul class="icons">
+						
+						{% if not current_user.is_authenticated %}
+							<li><a href="{{url_for('auth.register_page')}}" class="icon"><span>Register</span></a></li>
+							<li><a href="{{url_for('auth.login_page')}}" class="icon"><span>Login</span></a></li>
+						{% endif %}
+						
+						{% if current_user.is_authenticated  %}
+							<li><a href="{{url_for('auth.logout_page')}}" class="icon"><span>Logout</span></a></li>
+						{% endif %}
+							
+					</ul>
+					<ul class="icons">
+						<li><a href="https://github.com/nwizugbesamson" class="icon brands fa-github-square"><span class="label"></span></a></li>
+						<li><a href="https://twitter.com/nsa_samson" class="icon brands fa-twitter-square"><span class="label"></span></a></li>
+						<li><a href="https://medium.com/@samson6398" class="icon brands fa-medium"><span class="label"></span></a></li>
+						<li><a href="https://www.linkedin.com/in/samson-nwizugbe-a33839147/" class="icon brands fa-linkedin"><span class="label"></span></a></li>
+						<li><a href="https://resume-website.onrender.com/" class="icon solid fa-earth-americas"><span class="label"></span></a></li>
+					</ul>
+					<p class="copyright">&copy;<a href="https://resume-website.onrender.com/">Samson</a></p>
+				</footer>
+		</div>
+	</div>
+{% endblock sidebar %}
+				
+				
+

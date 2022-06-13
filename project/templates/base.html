@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Cafe Blog</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/font-awesome.min.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer">
+       
+        <script src="https://kit.fontawesome.com/5d8f290e4a.js" crossorigin="anonymous"></script>
+        	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="{{url_for('main.home_page')}}" class="logo"><strong>Cafes</strong></a>
+									<ul class="icons">
+										<li><a href="{{url_for('main.add_page')}}" class="icon solid fa-circle-plus"><span class="label"></span><br>Suggest Place<span></span></a></li>
+                                            
+                                            
+                                            {% if not current_user.is_authenticated %}
+                                            <li><a href="{{url_for('auth.login_page')}}" class="icon solid fa-user"><span class="label"></span><br><span>Login</span></a></li>
+                                            <li><a href="{{url_for('auth.register_page')}}" class="icon solid fa-users"><span class="label"></span><br><span>Join</span></a></li>
+                                            {% endif %}
+                                                
+
+                                            {% if current_user.is_authenticated %}
+                                            <li><a href="{{url_for('auth.logout_page')}}" class="icon solid fa-power-off"><span class="label"></span><br><span>Logout</span></a></li> 
+                                            {% endif %}
+                                                
+										
+                                        
+									</ul>
+								</header>
+                            <!-- End Header -->
+                        
+                        {% block content %}
+                            
+                        {% endblock content %}
+                        {% block sidebar %}
+                        {% endblock sidebar %}
+                            
+						</div>
+					</div>
+                <!-- End Main -->
+                
+            
+           
+                
+            </div>
+            <!-- End Wrapper -->
+
+        <!-- Scripts -->
+
+            <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+            <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+            <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+            <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+            <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.js"  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+        
+            <script type="text/javascript">
+                $(document).ready(function(){
+                    $('.list').click(function(){
+                        const value = $(this).attr('data-filter');
+                        if (value == "All"){
+                            $('.itemArticle').show('1000');
+                        }
+                        else{
+                            $('.itemArticle').not('.' + value).hide('1000');
+                            $('.itemArticle').filter('.' + value).show('1000');
+                        }
+                    })
+                    // add active class on selected item
+                  
+                    $('.list').click(function(){
+                        const nvalue = $(this).attr('class');
+                        if (nvalue == "active"){
+                            $(this).style.removeProperty('background-color')
+                            
+                        }
+                        else{
+                            $(this).addClass('active');
+                            
+                        }
+                        // to select only one class at a time 
+                    })
+                })
+            </script>
+    </body>
+</html>
